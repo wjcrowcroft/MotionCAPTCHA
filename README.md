@@ -63,7 +63,7 @@ In my book, all of these people are ace - I just borrowed from them and spliced 
 
         <form action="#" id="mycoolform" method="[get/post]">
 
-3. Add this placeholder <div> element to your form (NB. use <fieldset>s if you need it to validate) containing the blank canvas:
+3. Add this placeholder `<div>` element to your form (NB. use `<fieldset>`s if you need it to validate) containing the blank canvas:
 
         <div id="mc">
             <p>Please draw the shape in the box to submit the form:</p>
