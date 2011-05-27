@@ -54,72 +54,58 @@ In my book, all of these people are ace - I just borrowed from them and spliced 
 
 1. Add the plugin scripts: (I'm using jQuery 1.6 from the google API, but you could load it locally - and MotionCAPTCHA is supported down to jQuery 1.4):
 
-`
-	<!--[if IE]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
-	<script src="jquery.motionCaptcha.0.1.min.js"></script>
-	<link href="jquery.motionCaptcha.0.1.css"></script>
-`
+    
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
+        <script src="jquery.motionCaptcha.0.1.min.js"></script>
+        <link href="jquery.motionCaptcha.0.1.css"></script>
 
 2. Code the form as usual, with a unique ID (eg. '#mycoolform') and set the form action to blank (or '#') - eg:
 
-`
-	<form action="#" id="mycoolform" method="[get/post]">
-`
+        <form action="#" id="mycoolform" method="[get/post]">
 
 3. Add this placeholder <div> element to your form (NB. use <fieldset>s if you need it to validate) containing the blank canvas:
 
-`
-	<div id="mc">
-		<p>Please draw the shape in the box to submit the form:</p>
-		<canvas id="mc-canvas"></canvas>
-	</div>
-`
+        <div id="mc">
+            <p>Please draw the shape in the box to submit the form:</p>
+            <canvas id="mc-canvas"></canvas>
+        </div>
 
 4. Disable the submit button, eg:
 
-`
-	<input type="submit" disabled="disabled" value="Submit Form" />
-`
+        <input type="submit" disabled="disabled" value="Submit Form" />
 
 5. Add a hidden input to the form, with the form action as its value. Give it either a unique id, or the id 'mc-action', like so:
 
-`
-	<input type="hidden" id="fairly-unique-id" value="submitform.php" />
-`
+        <input type="hidden" id="fairly-unique-id" value="submitform.php" />
 
 6. Call the plugin on the form element. If you used any other ID than 'mc-action' for the hidden input, you'll just need to pass it to the plugin, like this:
 
-`	
-	$('#form-id').motioncaptcha({
-		action: '#fairly-unique-id'
-	});
-	
-	// Or, if you just used 'mc-action' as the hidden input's ID:
-	$('#form-id').motioncaptcha();
-`
+        $('#form-id').motioncaptcha({
+            action: '#fairly-unique-id'
+        });
+        
+        // Or, if you just used 'mc-action' as the hidden input's ID:
+        $('#form-id').motioncaptcha();
 
 7. Other options are available (defaults are shown):
 
-`
-	$('#form-id').motioncaptcha({
-		// Basics:
-		action: '#mc-action',        // the ID of the input containing the form action
-		divId: '#mc',                // if you use an ID other than '#mc' for the placeholder, pass it in here
-		cssClass: '.mc-active',      // this CSS class is applied to the 'mc' div when the plugin is active
-		canvasId: '#mc-canvas',      // the ID of the MotionCAPTCHA canvas element
-		
-		// An array of shape names that you want MotionCAPTCHA to use:
-		shapes: ['triangle', 'x', 'rectangle', 'circle', 'check', 'caret', 'zigzag', 'arrow', 'leftbracket', 'rightbracket', 'v', 'delete', 'star', 'pigtail'],
-		
-		// These messages are displayed inside the canvas after a user finishes drawing:
-		errorMsg: 'Please try again.',
-		successMsg: 'Captcha passed!',
-		
-		// This message is displayed if the user's browser doesn't support canvas:
-		noCanvasMsg: "Your browser doesn't support <canvas> - try Chrome, FF4, Safari or IE9."
-		
-		// This could be any HTML string (eg. '<label>Draw this shit yo:</label>'):
-		label: '<p>Please draw the shape in the box to submit the form:</p>'
-	});
-`
+        $('#form-id').motioncaptcha({
+            // Basics:
+            action: '#mc-action',        // the ID of the input containing the form action
+            divId: '#mc',                // if you use an ID other than '#mc' for the placeholder, pass it in here
+            cssClass: '.mc-active',      // this CSS class is applied to the 'mc' div when the plugin is active
+            canvasId: '#mc-canvas',      // the ID of the MotionCAPTCHA canvas element
+            
+            // An array of shape names that you want MotionCAPTCHA to use:
+            shapes: ['triangle', 'x', 'rectangle', 'circle', 'check', 'caret', 'zigzag', 'arrow', 'leftbracket', 'rightbracket', 'v', 'delete', 'star', 'pigtail'],
+            
+            // These messages are displayed inside the canvas after a user finishes drawing:
+            errorMsg: 'Please try again.',
+            successMsg: 'Captcha passed!',
+            
+            // This message is displayed if the user's browser doesn't support canvas:
+            noCanvasMsg: "Your browser doesn't support <canvas> - try Chrome, FF4, Safari or IE9."
+            
+            // This could be any HTML string (eg. '<label>Draw this shit yo:</label>'):
+            label: '<p>Please draw the shape in the box to submit the form:</p>'
+        });
