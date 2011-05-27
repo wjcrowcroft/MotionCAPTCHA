@@ -1,6 +1,6 @@
 MotionCAPTCHA is a jQuery CAPTCHA plugin that requires users to sketch the shape they see in the canvas in order to dubmit the form.
 
-**(Demo)[http://josscrowcroft.com/demos/motioncaptcha/ "MotionCAPTCHA Demo"]**
+### [Demo](http://josscrowcroft.com/demos/motioncaptcha/ "MotionCAPTCHA Demo")
 
 ## Important Introduction of sorts
 
