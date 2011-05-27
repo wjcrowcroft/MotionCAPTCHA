@@ -1,25 +1,17 @@
 MotionCAPTCHA is a jQuery CAPTCHA plugin that requires users to sketch the shape they see in the canvas in order to submit a form.
 
-At the moment, it's just a proof-of-concept, but the next releases will see progressive enhancement and the ability to use this in production environments.
+At the moment, it's just a proof-of-concept, (no IE8 support) but the next releases will see progressive enhancement and the ability to use this in production environments as a serious CAPTCHA alternative.
 
 ### [Demo](http://josscrowcroft.com/demos/motioncaptcha/ "MotionCAPTCHA Demo")
 
-### Proof of concept ... for now.
+Don't try to use MotionCAPTCHA v0.1 in production. I'm hopeful that people will be interested enough in this as a concept for me to devote a few weekends to turning it into a serious CAPTCHA alternative :o)
 
-Please be aware that MotionCAPTCHA was pretty much designed initially to be a proof of concept - as it is right now, I can't see people actually using it in production - BUT, as the roadmap below hints, I have a solid plan for how to turn this into an actually usable plugin, involving some very elegant progressive enhancement and clever server-side processing.
-
-I'm hoping people will be interested enough in this as a concept for me to devote a few weekends to turning it into a serious CAPTCHA alternative :o)
-
-Check out **How It Works** below to see how the basic thing works right now, as of v0.1.
-
-### No IE Support yet
-
-Going to try to fix it up for the next version, but either way, see the roadmap for info.
+Please try it out, suggest features and report bugs - if you want to help out turning this thing into a reality, fork away.
 
 
 ## How It Works
 
-So, in future, we will have progressive enhancement where the form uses a standard PHP (or similar weapon of choice) CAPTCHA script, and on page load, the plugin switches it for MotionCAPTCHA only if the browser is grown up enough.
+In v1.0, the plugin will use progressive enhancement so that the form uses a standard server-side (e.g. PHP) CAPTCHA script, and then on page load, the plugin switches that for the MotionCAPTCHA canvas, only if the browser is grown up enough.
 
 For now, here's how it works (if you need a step-by-step guide, there's a **How-To** below):
 
@@ -30,7 +22,7 @@ For now, here's how it works (if you need a step-by-step guide, there's a **How-
 I know this is going to be unpopular in its current state, because you're making it impossible for people to submit the form without JavaScript or Canvas support - BUT, who gives a crap, it's fun. And in future, it'll degrade gracefully, etc etc.
 
 
-## The Technology / Credits
+## Technology / Credits
 
 The MotionCAPTCHA plugin combines one of the brushes ('Ribbon' - and a lot of the logic) from [Mr Doob's Harmony canvas experiment](http://mrdoob.com/projects/harmony/), with gesture recognition algorithms and vector shapes based entirely on the [$1 Unistroke Gesture Recognizer](http://depts.washington.edu/aimgroup/proj/dollar/) by Jacob O. Wobbrock, Ph.D. and Andrew D. Wilson, Ph.D., and the later [Protractor algorithm](http://www.yangl.org/pdf/protractor-chi2010.pdf) improvement by Yang Li, Ph.D. 
 
@@ -39,7 +31,7 @@ The idea originally came from [Paul Irish's blog](http://www.paulirish.com), whe
 In my book, all of these people are ace - I just borrowed from them and spliced their works into one unholy mess (actually it's fairly tidy, though I'm hoping people will suggest performance improvements.)
 
 
-## Quick Roadmap:
+## Quick Roadmap
 
 ### v0.2
 * Try to fix up IE support via excanvas or similar library
