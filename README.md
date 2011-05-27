@@ -2,7 +2,7 @@ MotionCAPTCHA is a jQuery CAPTCHA plugin that requires users to sketch the shape
 
 At the moment, it's just a proof-of-concept, (no IE8 support) but the next releases will see progressive enhancement and the ability to use this in production environments as a serious CAPTCHA alternative.
 
-### [Demo](http://josscrowcroft.com/demos/motioncaptcha/ "MotionCAPTCHA Demo") ¥ [Homepage / Screenshots](http://josscrowcroft.com/projects/motioncaptcha-jquery-plugin/ "MotionCAPTCHA - Joss Crowcroft") 
+### [Demo](http://josscrowcroft.com/demos/motioncaptcha/ "MotionCAPTCHA Demo") &bull; [Homepage / Screenshots](http://josscrowcroft.com/projects/motioncaptcha-jquery-plugin/ "MotionCAPTCHA - Joss Crowcroft") 
 
 Don't try to use MotionCAPTCHA v0.1 in production. I'm hopeful that people will be interested enough in this as a concept for me to devote a few weekends to turning it into a serious CAPTCHA alternative :o)
 
