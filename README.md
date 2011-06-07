@@ -4,7 +4,11 @@ At the moment, it's just a proof-of-concept, (no IE8 support) but the next relea
 
 ### [Demo](http://josscrowcroft.com/demos/motioncaptcha/ "MotionCAPTCHA Demo") &bull; [Homepage / Screenshots](http://josscrowcroft.com/projects/motioncaptcha-jquery-plugin/ "MotionCAPTCHA - Joss Crowcroft") 
 
-Don't try to use MotionCAPTCHA v0.1 in production. I'm hopeful that people will be interested enough in this as a concept for me to devote a few weekends to turning it into a serious CAPTCHA alternative :o)
+Don't try to use MotionCAPTCHA v0.1 in production. 
+
+**Update:** people seem to be interested enough in this as a concept, so I've sketched out the next few weekends to work on this and turn it into a production-ready CAPTCHA alternative.. hit 'watch' to stay updated. 
+
+The response has been much more awesome than I had anticipated - thanks everyone!
 
 Please try it out, suggest features and report bugs - if you want to help out turning this thing into a reality, fork away.
 
@@ -39,7 +43,10 @@ In my book, all of these people are ace - I just borrowed from them and spliced 
 
 ### v1.0
 * a) Combine with a simple PHP CAPTCHA and server-side checking script, for progressive enhancement. By default, form is submitted with regular CAPTCHA. On page load, if browser supports JavaScript and HTML5 Canvas, regular CAPTCHA is switched for mighty MotionCAPTCHA, and that would be checked on the server instead.
-* b) See (a).
+* b) See (a)
+
+### v1.1
+* Perform (or add option/scripts to perform) server-side validation of the vector shape drawn by the user. Thought this was in the roadmap already (thanks [RobIII](http://robiii.nl "RobIII") for pointing out!)
 
 
 ## How To Use
