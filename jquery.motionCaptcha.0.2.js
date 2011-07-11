@@ -49,12 +49,12 @@ jQuery.fn.motionCaptcha || (function($) {
 			// Set up MotionCAPTCHA canvas vars:
 			var canvasWidth = $canvas.width(),
 				canvasHeight = $canvas.height(),
-				offsetX = $canvas.offset().left + 1 * ( $canvas.css('borderLeftWidth').replace('px', '') ),
-				offsetY = $canvas.offset().top + 1 * ( $canvas.css('borderTopWidth').replace('px', '') );
-			
+				borderLeftWidth = 1 * $canvas.css('borderLeftWidth').replace('px', ''),
+				borderTopWidth = 1 * $canvas.css('borderTopWidth').replace('px', '');			
+
 			// Canvas setup:
 			
-			// Set the canvas DOM element's dimensions to match the display width/height:
+			// Set the canvas DOM element's dimensions to match the display width/height (pretty important):
 			$canvas[0].width = canvasWidth;
 			$canvas[0].height = canvasHeight;
 			
@@ -232,19 +232,19 @@ jQuery.fn.motionCaptcha || (function($) {
 			function getPos(event) {
 				var x, y;
 				
-				// Check for mobile first to avoid android jumpy-touch bug:
+				// Check for mobile first to avoid android jumpy-touch bug (iOS / Android):
 				if ( event.touches && event.touches.length > 0 ) {
 					// iOS/android uses event.touches, relative to entire page:
-					x = event.touches[0].pageX - offsetX;
-					y = event.touches[0].pageY - offsetY;
+					x = event.touches[0].pageX - $canvas.offset().left + borderLeftWidth;
+					y = event.touches[0].pageY - $canvas.offset().top + borderTopWidth;
 				} else if ( event.offsetX ) {
 					// Chrome/Safari give the event offset relative to the target event:
-					x = event.offsetX - 1 * ( $canvas.css('borderLeftWidth').replace('px', '') );
-					y = event.offsetY - 1 * ( $canvas.css('borderTopWidth').replace('px', '') );
+					x = event.offsetX - borderLeftWidth;
+					y = event.offsetY - borderTopWidth;
 				} else {
-					// Otherwise, subtract the page click coords from the canvas offset coords:
-					x = event.pageX - offsetX;
-					y = event.pageY - offsetY;
+					// Otherwise, subtract page click from canvas offset (Firefox uses this):
+					x = event.pageX - $canvas.offset().left - borderLeftWidth;
+					y = event.pageY - $canvas.offset().top - borderTopWidth;
 				}
 				return [x,y];
 			}
@@ -492,7 +492,6 @@ jQuery.fn.motionCaptcha || (function($) {
 
 		// $1 Gesture Recognizer API (now using Protractor instead)
 		this.Recognize = function(points) {
-/* 			console.log(points); */
 			var b = +Infinity,
 				t = 0,
 				radians,
@@ -510,7 +509,6 @@ jQuery.fn.motionCaptcha || (function($) {
 				if (d < b) {
 					b = d; // best (least) distance
 					t = i; // unistroke template
-/* 					console.log(this.Templates[i].Name, 1 / b); */
 				}
 			}
 			return new Result(this.Templates[t].Name, 1 / b);

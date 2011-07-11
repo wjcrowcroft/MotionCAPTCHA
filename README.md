@@ -1,14 +1,12 @@
 MotionCAPTCHA is a jQuery CAPTCHA plugin that requires users to sketch the shape they see in the canvas in order to submit a form.
 
-At the moment, it's just a proof-of-concept, (no IE8 support) but the next releases will see progressive enhancement and the ability to use this in production environments as a serious CAPTCHA alternative.
+At the moment, it's just a proof-of-concept, (no IE support) but the next releases will see progressive enhancement and the ability to use this in production environments as a serious CAPTCHA alternative.
 
 ### [Demo](http://josscrowcroft.com/demos/motioncaptcha/ "MotionCAPTCHA Demo") &bull; [Homepage / Screenshots](http://josscrowcroft.com/projects/motioncaptcha-jquery-plugin/ "MotionCAPTCHA - Joss Crowcroft") 
 
-Don't try to use MotionCAPTCHA v0.1 in production. 
+Don't try to use MotionCAPTCHA v0.2 in production - watch and wait for the full release!
 
 **Update:** people seem to be interested enough in this as a concept, so I've sketched out the next few weekends to work on this and turn it into a production-ready CAPTCHA alternative.. hit 'watch' to stay updated. 
-
-The response has been much more awesome than I had anticipated - thanks everyone!
 
 Please try it out, suggest features and report bugs - if you want to help out turning this thing into a reality, fork away.
 
@@ -37,7 +35,7 @@ In my book, all of these people are ace - I just borrowed from them and spliced 
 
 ## Quick Roadmap
 
-### v0.2
+### v0.3
 * Try to fix up IE support via excanvas or similar library
 * Add a real functionality for a 'new shape' button (a shape-switcharoo method)
 
@@ -49,14 +47,21 @@ In my book, all of these people are ace - I just borrowed from them and spliced 
 * Perform (or add option/scripts to perform) server-side validation of the vector shape drawn by the user. Thought this was in the roadmap already (thanks [RobIII](http://robiii.nl "RobIII") for pointing out!)
 
 
+## Changelog
+
+### v0.2
+* Added mobile support for current functionality. Should work in Android and iOS (iPhones/iPads) now.
+* A few speed improvements and code cleanups.
+
+
 ## How To Use
 
 1. Add the plugin scripts: (I'm using jQuery 1.6 from the google API, but you could load it locally - and MotionCAPTCHA is supported down to jQuery 1.4):
 
     
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
-        <script src="jquery.motionCaptcha.0.1.min.js"></script>
-        <link href="jquery.motionCaptcha.0.1.css"></script>
+        <script src="jquery.motionCaptcha.0.2.min.js"></script>
+        <link href="jquery.motionCaptcha.0.2.css"></script>
 
 2. Code the form as usual, with a unique ID (eg. '#mycoolform') and set the form action to blank (or '#') - eg:
 
