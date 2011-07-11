@@ -1,12 +1,14 @@
 /*!
- * jQuery MotionCAPTCHA v0.1
+ * jQuery MotionCAPTCHA v0.2
  * 
  * Proof of concept only for now, check the roadmap to see when it will be ready for wider use!
  * 
  * http://josscrowcroft.com/projects/motioncaptcha-jquery-plugin/
- * DEMO: http://josscrowcroft.com/demos/motioncaptcha/
  * 
- * Copyright (c) 2010 Joss Crowcroft - joss[at]josscrowcroft[dot]com | http://www.josscrowcroft.com
+ * DEMO: http://josscrowcroft.com/demos/motioncaptcha/
+ * CODE: https://github.com/josscrowcroft/MotionCAPTCHA
+ * 
+ * Copyright (c) 2011 Joss Crowcroft - joss[at]josscrowcroftcom | http://www.josscrowcroft.com
  * 
  * Incoporates other open source projects, attributed below.
  */
@@ -47,8 +49,8 @@ jQuery.fn.motionCaptcha || (function($) {
 			// Set up MotionCAPTCHA canvas vars:
 			var canvasWidth = $canvas.width(),
 				canvasHeight = $canvas.height(),
-				offsetX = $canvas.offset().left,
-				offsetY = $canvas.offset().top;
+				offsetX = $canvas.offset().left + 1 * ( $canvas.css('borderLeftWidth').replace('px', '') ),
+				offsetY = $canvas.offset().top + 1 * ( $canvas.css('borderTopWidth').replace('px', '') );
 			
 			// Canvas setup:
 			
@@ -70,157 +72,179 @@ jQuery.fn.motionCaptcha || (function($) {
 			// Set random shape
 			$canvas.addClass( opts.shapes[Math.floor(Math.random() * (opts.shapes.length) )] );
 			
-			// Set up Dollar Recognizer vars:
+			// Set up Dollar Recognizer and drawing vars:
 			var _isDown = false,
+				_holdStill = false,
 				_points = [], 
 				_r = new DollarRecognizer();
 
 			// Create the Harmony Ribbon brush:
 			brush = new Ribbon(ctx);
 			
-			// Bind events to canvas:
-			$canvas.bind({
-				// Mousedown event
-				// Start Harmony brushstroke and begin recording DR points:
-				mousedown: function(event) {
-					if ( locked )
-						return false;
-					
+
+
+
+			// Mousedown event
+			// Start Harmony brushstroke and begin recording DR points:
+			var touchStartEvent = function(event) {
+				if ( locked )
+					return false;
+				
+				// Prevent default action:
+				event.preventDefault();
+				
+				// Get mouse position inside the canvas:
+				var pos = getPos(event),
+					x = pos[0],
+					y = pos[1];
+				
+				// Internal drawing var	
+				_isDown = true;
+				
+				// Prevent jumpy-touch bug on android, no effect on other platforms:
+				_holdStill = true;
+				
+				// Disable text selection:
+				$('body').addClass('mc-noselect');
+				
+				// Clear canvas:
+				ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+				
+				// Start brushstroke:
+				brush.strokeStart(x, y);
+
+				// Remove 'mc-invalid' and 'mc-valid' classes from canvas:
+				$canvas.removeClass('mc-invalid mc-valid');
+				
+				// Add the first point to the points array:
+				_points = [NewPoint(x, y)];
+
+				return false;
+			}; // mousedown/touchstart event
+
+			// Mousemove event:
+			var touchMoveEvent = function(event) {
+				if ( _holdStill ) {
+					return _holdStill = 0;
+				}
+				// If mouse is down and canvas not locked:
+				if ( !locked && _isDown ) {
+									
 					// Prevent default action:
 					event.preventDefault();
-					
+
 					// Get mouse position inside the canvas:
 					var pos = getPos(event),
 						x = pos[0],
 						y = pos[1];
-										
-					_isDown = true;
-						
-					// Disable text selection:
-					$('body').addClass('mc-noselect');
 					
-					// Clear canvas:
-					ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+					// Append point to points array:
+					_points[_points.length] = NewPoint(x, y);
 					
-					// Start brushstroke:
-					brush.strokeStart(x, y);
-
-					// Remove 'mc-invalid' and 'mc-valid' classes from canvas:
-					$canvas.removeClass('mc-invalid mc-valid');
+					// Do brushstroke:
+					brush.stroke(x, y);
+				}
+				return false;
+			}; // mousemove/touchmove event
+			
+			
+			// Mouseup event:
+			var touchEndEvent = function(event) {
+				// If mouse is down and canvas not locked:
+				if ( !locked && _isDown ) {
+					_isDown = false;
 					
-					// Add the first point to the points array:
-					_points = [NewPoint(x, y)];
-
-					return false;
-				}, // mousedown
-				
-				// Mousemove event:
-				mousemove: function(event) {
-					// If mouse is down and canvas not locked:
-					if ( !locked && _isDown ) {
-										
-						// Prevent default action:
-						event.preventDefault();
-
-						// Get mouse position inside the canvas:
-						var pos = getPos(event),
-							x = pos[0],
-							y = pos[1];
-						
-						// Append point to points array:
-						_points[_points.length] = NewPoint(x, y);
-						
-						// Do brushstroke:
-						brush.stroke(x, y);
-
-					}
-					return false;
-				}, // mousemove
-				
-				// Mouseup event:
-				mouseup: function(event) {
-					// If mouse is down and canvas not locked:
-					if ( !locked && _isDown ) {
-						_isDown = false;
-						
-						// Allow text-selection again:
-						$('body').removeClass('mc-noselect');
-												
-						// Get mouse position inside the canvas:
-						var pos = getPos(event),
-							x = pos[0],
-							y = pos[1];
-
-						// Dollar Recognizer result:
-						if (_points.length >= 10) {
-							var result = _r.Recognize(_points);
+					// Allow text-selection again:
+					$('body').removeClass('mc-noselect');
+					
+					// Dollar Recognizer result:
+					if (_points.length >= 10) {
+						var result = _r.Recognize(_points);
+						// Check result:
+						if ( $canvas.attr('class').match(result.Name) && result.Score > 0.7 ) {
 							
-							// Check result:
-							if ( $canvas.attr('class').match(result.Name) && result.Score > 0.7 ) {
-								
-								// Lock the canvas:
-								locked = 1;
-								
-								// Destroy the Harmony brush (give it time to finish drawing)
-								setTimeout( brush.destroy, 500 );
-								
-								// Add 'mc-valid' class to canvas:
-								$canvas.addClass('mc-valid');
-								
-								// Write success message into canvas:
-								ctx.fillText(opts.successMsg, 10, 24);
-								
-								// Call the onSuccess function to handle the rest of the business:
-								// Pass in the form, the canvas, the canvas context:
-								opts.onSuccess($form, $canvas, ctx);
-								
-							} else {
-								
-								// Add 'mc-invalid' class to canvas:
-								$canvas.addClass('mc-invalid');
-								
-								// Write error message into canvas:
-								ctx.fillText(opts.errorMsg, 10, 24);
-								
-								// Pass off to the error callback to finish up:
-								opts.onError($form, $canvas, ctx);
-							}
+							// Lock the canvas:
+							locked = 1;
 							
-						} else { // fewer than 10 points were recorded:
+							// Destroy the Harmony brush (give it time to finish drawing)
+							setTimeout( brush.destroy, 500 );
+							
+							// Add 'mc-valid' class to canvas:
+							$canvas.addClass('mc-valid');
+							
+							// Write success message into canvas:
+							ctx.fillText(opts.successMsg, 10, 24);
+							
+							// Call the onSuccess function to handle the rest of the business:
+							// Pass in the form, the canvas, the canvas context:
+							opts.onSuccess($form, $canvas, ctx);
+							
+						} else {
 							
 							// Add 'mc-invalid' class to canvas:
 							$canvas.addClass('mc-invalid');
 							
 							// Write error message into canvas:
 							ctx.fillText(opts.errorMsg, 10, 24);
-
+							
 							// Pass off to the error callback to finish up:
 							opts.onError($form, $canvas, ctx);
 						}
+						
+					} else { // fewer than 10 points were recorded:
+						
+						// Add 'mc-invalid' class to canvas:
+						$canvas.addClass('mc-invalid');
+						
+						// Write error message into canvas:
+						ctx.fillText(opts.errorMsg, 10, 24);
+
+						// Pass off to the error callback to finish up:
+						opts.onError($form, $canvas, ctx);
 					}
-					return false;
-				} // mouseup
+				}
+				return false;
+			}; // mouseup/touchend event
+
+			// Bind events to canvas:
+			$canvas.bind({
+				mousedown:  touchStartEvent,
+				mousemove: touchMoveEvent,
+				mouseup:  touchEndEvent,
 			});
+
+			// Mobile touch events:
+			$canvas[0].addEventListener('touchstart', touchStartEvent, false);
+			$canvas[0].addEventListener('touchmove', touchMoveEvent, false);
+			$canvas[0].addEventListener('touchend', touchEndEvent, false);
 
 			// Add active CSS class to form:
 			$form.addClass(opts.cssClass.replace(/\./, ''))
 
 		
 			/**
-			 * Get X/Y mouse position, relative to (inside) the canvas
+			 * Get X/Y mouse position, relative to (/inside) the canvas
 			 * 
 			 * Handles cross-browser quirks rather nicely, I feel.
+			 * 
+			 * @todo For 1.0, if no way to obtain coordinates, don't activate MotionCAPTCHA.
 			 */
-			// Get X/Y values in the canvas:
 			function getPos(event) {
-				// Chrome/Safari give the event offset relative to the target event:
-				if ( event.offsetX ) {
-					x = event.offsetX;
-					y = event.offsetY;
+				var x, y;
+				
+				// Check for mobile first to avoid android jumpy-touch bug:
+				if ( event.touches && event.touches.length > 0 ) {
+					// iOS/android uses event.touches, relative to entire page:
+					x = event.touches[0].pageX - offsetX;
+					y = event.touches[0].pageY - offsetY;
+				} else if ( event.offsetX ) {
+					// Chrome/Safari give the event offset relative to the target event:
+					x = event.offsetX - 1 * ( $canvas.css('borderLeftWidth').replace('px', '') );
+					y = event.offsetY - 1 * ( $canvas.css('borderTopWidth').replace('px', '') );
 				} else {
-					// Otherwise, subtract the page coords from the canvas offset coords:
-					x = event.pageX - $canvas.offset().left;
-					y = event.pageY - $canvas.offset().top;
+					// Otherwise, subtract the page click coords from the canvas offset coords:
+					x = event.pageX - offsetX;
+					y = event.pageY - offsetY;
 				}
 				return [x,y];
 			}
@@ -317,7 +341,7 @@ jQuery.fn.motionCaptcha || (function($) {
 			this.painters = [];
 			
 			// Draw each of the lines:
-			for ( var i = 0; i < 42; i++ ) {
+			for ( var i = 0; i < 38; i++ ) {
 				this.painters.push({
 					dx: this.ctx.canvasWidth / 2, 
 					dy: this.ctx.canvasHeight / 2, 
@@ -468,7 +492,7 @@ jQuery.fn.motionCaptcha || (function($) {
 
 		// $1 Gesture Recognizer API (now using Protractor instead)
 		this.Recognize = function(points) {
-			console.log(points);
+/* 			console.log(points); */
 			var b = +Infinity,
 				t = 0,
 				radians,
@@ -486,7 +510,7 @@ jQuery.fn.motionCaptcha || (function($) {
 				if (d < b) {
 					b = d; // best (least) distance
 					t = i; // unistroke template
-					console.log(this.Templates[i].Name, 1 / b);
+/* 					console.log(this.Templates[i].Name, 1 / b); */
 				}
 			}
 			return new Result(this.Templates[t].Name, 1 / b);
