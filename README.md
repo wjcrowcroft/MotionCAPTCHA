@@ -6,9 +6,9 @@ At the moment, it's just a proof-of-concept, (no IE support) but the next releas
 
 Don't try to use MotionCAPTCHA v0.2 in production - watch and wait for the full release!
 
-**Update:** people seem to be interested enough in this as a concept, so I've sketched out the next few weekends to work on this and turn it into a production-ready CAPTCHA alternative.. hit 'watch' to stay updated. 
+**Update 22-08-11:** For everyone who's been watching, my apologies for not updating you sooner. The response to MotionCATPCHA has been amazing, and I still have big plans for it, but work and other distractions got in the way - to everyone who still wants to see MotionCATPCHA become fully-fledged and being used on live sites and apps, watch out for a codesmash day in September (possibly the 10th!)
 
-Please try it out, suggest features and report bugs - if you want to help out turning this thing into a reality, fork away.
+In the meantime, please try it out, suggest features and report bugs - if you want to help out turning this thing into a reality, fork away.
 
 
 ## How It Works
